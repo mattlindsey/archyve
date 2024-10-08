@@ -54,6 +54,11 @@ dev_model_servers = [
     "name" => "localhost",
     "url" => "http://localhost:11434",
     "provider" => "ollama",
+  },
+  { "name" => "OpenAI",
+    "url" => "https://api.openai.com/v1",
+    "provider" => "openai",
+    "api_key" => "sk-????",
   }
 ]
 
@@ -121,6 +126,14 @@ provisioned_model_configs.each do |fields|
   end
 end
 
+openai_server = ModelServer.find_by(name: "OpenAI")
+if Rails.env == "development" && openai_server
+  ModelConfig.create!(
+    name: "GPT-4o",
+    model: "gpt-4o",
+    temperature: 0.1,
+    model_server_id: openai_server.id)
+end
 
 # SETTINGS
 #
